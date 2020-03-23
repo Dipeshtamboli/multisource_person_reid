@@ -1,5 +1,6 @@
-<h1 align="center"> Person_reID_baseline_pytorch </h1>
+<h1 align="center"> Person re-identification utilizing multiple source domains </h1>
 
+Here, we are using baseline model from [Layumi's Person re-ID](https://github.com/layumi/Person_reID_baseline_pytorch) for extracting features and for baseline model. So citing it as it and also using it's readme file with suitable chamges.
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/layumi/Person_reID_baseline_pytorch.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/layumi/Person_reID_baseline_pytorch/context:python)
 [![Build Status](https://travis-ci.org/layumi/Person_reID_baseline_pytorch.svg?branch=master)](https://travis-ci.org/layumi/Person_reID_baseline_pytorch)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/layumi/Person_reID_baseline_pytorch.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/layumi/Person_reID_baseline_pytorch/alerts/)
@@ -15,7 +16,7 @@ A tiny, friendly, strong baseline code for Person-reID (based on [pytorch](https
 Besides, if you are new to person re-ID, you may check out our **[Tutorial](https://github.com/layumi/Person_reID_baseline_pytorch/tree/master/tutorial)** first (8 min read) :+1: .
 ![](https://github.com/layumi/Person_reID_baseline_pytorch/blob/master/show.png)
 
-## Table of contents
+<!-- ## Table of contents
 * [Features](#features)
 * [Some News](#some-news)
 * [Trained Model](#trained-model)
@@ -28,9 +29,9 @@ Besides, if you are new to person re-ID, you may check out our **[Tutorial](http
     * [Evaluation](#evaluation)
 * [Tips for training with other datasets](#tips)
 * [Citation](#citation)
-* [Related Repos](#related-repos)
+* [Related Repos](#related-repos) -->
 
-## Features
+<!-- ## Features
 Now we have supported:
 - Float16 to save GPU memory based on [apex](https://github.com/NVIDIA/apex)
 - Part-based Convolutional Baseline(PCB)
@@ -48,9 +49,9 @@ Some of them (i.e. learning rate) are far from optimal. Do not hesitate to chang
 
 P.S. With similar structure, we arrived **Rank@1=87.74% mAP=69.46%** with [Matconvnet](http://www.vlfeat.org/matconvnet/). (batchsize=8, dropout=0.75) 
 You may refer to [Here](https://github.com/layumi/Person_reID_baseline_matconvnet).
-Different framework need to be tuned in a different way.
+Different framework need to be tuned in a different way. -->
 
-## Some News
+<!-- ## Some News
 **01 March 2020** We release one new image retrieval dataset, called [University-1652](https://github.com/layumi/University1652-Baseline), for drone-view target localization and drone navigation :helicopter:. It has a similar setting with the person re-ID. You are welcomed to check out it.
 
 **07 July 2019:** I added some new functions, such as `--resume`, auto-augmentation policy, acos loss, into [developing thread](https://github.com/layumi/Person_reID_baseline_pytorch/tree/dev) and rewrite the `save` and `load` functions. I haven't tested the functions throughly. Some new functions are worthy of having a try. If you are first to this repo, I suggest you stay with the master thread.
@@ -99,9 +100,9 @@ python test.py --PCB --name PCB-64
 
 **What's new:** I add some code to generate training curves. The figure will be saved into the model folder when training.
 
-![](https://github.com/layumi/Person_reID_baseline_pytorch/blob/master/train.jpg)
+![](https://github.com/layumi/Person_reID_baseline_pytorch/blob/master/train.jpg) -->
 
-## Trained Model
+<!-- ## Trained Model
 I re-trained several models, and the results may be different with the original one. Just for a quick reference, you may directly use these models. 
 The download link is [Here](https://drive.google.com/open?id=1XVEYb0TN2SbBYOqf8SzazfYZlpH9CxyE).
 
@@ -111,54 +112,48 @@ The download link is [Here](https://drive.google.com/open?id=1XVEYb0TN2SbBYOqf8S
 | [DenseNet-121] | 90.17% | 74.02% | `python train.py --name ft_net_dense --use_dense --train_all` |
 | [PCB] | 92.64% | 77.47% | `python train.py --name PCB --PCB --train_all --lr 0.02` |
 | [ResNet-50 (fp16)] | 88.03% | 71.40% | `python train.py --name fp16 --fp16 --train_all` |
-| [ResNet-50 (all tricks)] | 91.83% | 78.32% | `python train.py --warm_epoch 5 --stride 1 --erasing_p 0.5 --batchsize 8 --lr 0.02 --name warm5_s1_b8_lr2_p0.5` |
+| [ResNet-50 (all tricks)] | 91.83% | 78.32% | `python train.py --warm_epoch 5 --stride 1 --erasing_p 0.5 --batchsize 8 --lr 0.02 --name warm5_s1_b8_lr2_p0.5` | -->
 
-### Model Structure
-You may learn more from `model.py`. 
-We add one linear layer(bottleneck), one batchnorm layer and relu.
 
-## Prerequisites
 
-- Python 3.6
-- GPU Memory >= 6G
-- Numpy
-- Pytorch 0.3+
-- [Optional] apex (for float16) 
-- [Optional] [pretrainedmodels](https://github.com/Cadene/pretrained-models.pytorch)
-
-**(Some reports found that updating numpy can arrive the right accuracy. If you only get 50~80 Top1 Accuracy, just try it.)**
-We have successfully run the code based on numpy 1.12.1 and 1.13.1 .
-
-## Getting started
-### Installation
-- Install Pytorch from http://pytorch.org/
-- Install Torchvision from the source
-```
-git clone https://github.com/pytorch/vision
-cd vision
-python setup.py install
-```
-- [Optinal] You may skip it. Install apex from the source
-```
-git clone https://github.com/NVIDIA/apex.git
-cd apex
-python setup.py install --cuda_ext --cpp_ext
-```
-Because pytorch and torchvision are ongoing projects.
-
-Here we noted that our code is tested based on Pytorch 0.3.0/0.4.0/0.5.0/1.0.0 and Torchvision 0.2.0/0.2.1 .
-
-### Dataset & Preparation
+### Prepare Data Folder (`python prepare.py`)
 Download [Market1501 Dataset](http://www.liangzheng.com.cn/Project/project_reid.html) [[Google]](https://drive.google.com/file/d/0B8-rUzbwVRk0c054eEozWG9COHM/view) [[Baidu]](https://pan.baidu.com/s/1ntIi2Op)
-
-Preparation: Put the images with the same id in one folder. You may use 
+You may notice that the downloaded folder is organized as:
+```
+├── Market/
+│   ├── bounding_box_test/          /* Files for testing (candidate images pool)
+│   ├── bounding_box_train/         /* Files for training 
+│   ├── gt_bbox/                    /* Files for multiple query testing 
+│   ├── gt_query/                   /* We do not use it 
+│   ├── query/                      /* Files for testing (query images)
+│   ├── readme.txt
+```
+Open and edit the script `prepare.py` in the editor. Change the fifth line in `prepare.py` to your download path, such as `\home\zzd\Download\Market`. Run this script in the terminal.
 ```bash
 python prepare.py
 ```
-Remember to change the dataset path to your own path.
+We create a subfolder called `pytorch` under the download folder. 
+```
+├── Market/
+│   ├── bounding_box_test/          /* Files for testing (candidate images pool)
+│   ├── bounding_box_train/         /* Files for training 
+│   ├── gt_bbox/                    /* Files for multiple query testing 
+│   ├── gt_query/                   /* We do not use it
+│   ├── query/                      /* Files for testing (query images)
+│   ├── readme.txt
+│   ├── pytorch/
+│       ├── train/                   /* train 
+│           ├── 0002
+|           ├── 0007
+|           ...
+│       ├── val/                     /* val
+│       ├── train_all/               /* train+val      
+│       ├── query/                   /* query files  
+│       ├── gallery/                 /* gallery files  
+```
 
-Futhermore, you also can test our code on [DukeMTMC-reID Dataset](https://github.com/layumi/DukeMTMC-reID_evaluation).
-Our baseline code is not such high on DukeMTMC-reID **Rank@1=64.23%, mAP=43.92%**. Hyperparameters are need to be tuned.
+In every subdir, such as `pytorch/train/0002`, images with the same ID are arranged in the folder.
+Now we have successfully prepared the data for `torchvision` to read the data. 
 
 ### Train
 Train a model by
@@ -207,7 +202,14 @@ You may also try `evaluate_gpu.py` to conduct a faster evaluation with GPU.
 
 For mAP calculation, you also can refer to the [C++ code for Oxford Building](http://www.robots.ox.ac.uk/~vgg/data/oxbuildings/compute_ap.cpp). We use the triangle mAP calculation (consistent with the Market1501 original code).
 
-### re-ranking
+### A simple visualization (`python demo.py`)
+To visualize the result, 
+```
+python demo.py --query_index 777
+```
+`--query_index ` which query you want to test. You may select a number in the range of `0 ~ 3367`.
+
+<!-- ### re-ranking
 ```bash
 python evaluate_rerank.py
 ```
@@ -221,10 +223,10 @@ Notes the format of the camera id and the number of cameras.
 For some dataset, e.g., MSMT17, there are more than 10 cameras. You need to modify the `prepare.py` and `test.py` to read the double-digit camera ID.
 
 For some vehicle re-ID datasets. e.g. VeRi, you also need to modify the `prepare.py` and `test.py`.  It has different naming rules.
-https://github.com/layumi/Person_reID_baseline_pytorch/issues/107 (Sorry. It is in Chinese)
+https://github.com/layumi/Person_reID_baseline_pytorch/issues/107 (Sorry. It is in Chinese) -->
 
 
-## Citation
+<!-- ## Citation
 The following paper uses and reports the result of the baseline model. You may cite it in your paper.
 ```
 @article{zheng2019joint,
@@ -267,7 +269,7 @@ Basic Model
   year={2018},
   publisher={ACM}
 }
-```
+``` -->
 
 ## Related Repos
 1. [Pedestrian Alignment Network](https://github.com/layumi/Pedestrian_Alignment) ![GitHub stars](https://img.shields.io/github/stars/layumi/Pedestrian_Alignment.svg?style=flat&label=Star)
