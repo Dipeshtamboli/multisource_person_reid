@@ -1,7 +1,8 @@
 <h1 align="center"> Person re-identification utilizing multiple source domains </h1>
 
-Here, we are using baseline model from [Layumi's Person re-ID](https://github.com/layumi/Person_reID_baseline_pytorch) for extracting features and for baseline model. So citing it as it and also using it's readme file with suitable chamges.
-[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/layumi/Person_reID_baseline_pytorch.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/layumi/Person_reID_baseline_pytorch/context:python)
+Here, we are using [Layumi's Person re-ID](https://github.com/layumi/Person_reID_baseline_pytorch) code for extracting features and to create baseline model. So citing it as it is and also using it's readme file with suitable chamges.
+
+<!-- [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/layumi/Person_reID_baseline_pytorch.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/layumi/Person_reID_baseline_pytorch/context:python)
 [![Build Status](https://travis-ci.org/layumi/Person_reID_baseline_pytorch.svg?branch=master)](https://travis-ci.org/layumi/Person_reID_baseline_pytorch)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/layumi/Person_reID_baseline_pytorch.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/layumi/Person_reID_baseline_pytorch/alerts/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
@@ -14,7 +15,7 @@ A tiny, friendly, strong baseline code for Person-reID (based on [pytorch](https
 
 - **Friendly.** You may use the off-the-shelf options to apply many state-of-the-art tricks in one line.
 Besides, if you are new to person re-ID, you may check out our **[Tutorial](https://github.com/layumi/Person_reID_baseline_pytorch/tree/master/tutorial)** first (8 min read) :+1: .
-![](https://github.com/layumi/Person_reID_baseline_pytorch/blob/master/show.png)
+![](https://github.com/layumi/Person_reID_baseline_pytorch/blob/master/show.png) -->
 
 <!-- ## Table of contents
 * [Features](#features)
