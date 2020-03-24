@@ -2,7 +2,8 @@ import os
 from shutil import copyfile
 
 # You only need to change this line to your dataset download path
-download_path = '/home/dipesh/multisource_person_reid/data/Market-1501-v15.09.15'
+download_path = '/home/dipesh/multisource_person_reid/data/DukeMTMC-reID'
+# sftp://dipesh@10.142.142.137/home/dipesh/multisource_person_reid/data/DukeMTMC-reID/bounding_box_test
 # sftp://dipesh@10.142.142.137/home/dipesh/reid/data/Market-1501-v15.09.15
 if not os.path.isdir(download_path):
     print('please change the download_path')
@@ -29,6 +30,7 @@ for root, dirs, files in os.walk(query_path, topdown=True):
         copyfile(src_path, dst_path + '/' + name)
 
 #-----------------------------------------
+'''
 #multi-query
 query_path = download_path + '/gt_bbox'
 # for dukemtmc-reid, we do not need multi-query
@@ -47,7 +49,7 @@ if os.path.isdir(query_path):
             if not os.path.isdir(dst_path):
                 os.mkdir(dst_path)
             copyfile(src_path, dst_path + '/' + name)
-
+'''
 #-----------------------------------------
 #gallery
 gallery_path = download_path + '/bounding_box_test'

@@ -32,7 +32,7 @@ parser = argparse.ArgumentParser(description='Training')
 parser.add_argument('--gpu_ids',default='0', type=str,help='gpu_ids: e.g. 0  0,1,2  0,2')
 parser.add_argument('--which_epoch',default='last', type=str, help='0,1,2,3...or last')
 parser.add_argument('--test_dir',default='/home/dipesh/multisource_person_reid/data/DukeMTMC-reID/pytorch',type=str, help='./test_data')
-parser.add_argument('--name', default='ft_ResNet50', type=str, help='save model path')
+parser.add_argument('--name', default='duke', type=str, help='save model path')
 parser.add_argument('--batchsize', default=256, type=int, help='batchsize')
 parser.add_argument('--use_dense', action='store_true', help='use densenet121' )
 parser.add_argument('--PCB', action='store_true', help='use PCB' )
@@ -40,6 +40,7 @@ parser.add_argument('--multi', action='store_true', help='use multiple query' )
 parser.add_argument('--fp16', action='store_true', help='use fp16.' )
 parser.add_argument('--ms',default='1', type=str,help='multiple_scale: e.g. 1 1,1.1  1,1.1,1.2')
 
+os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 opt = parser.parse_args()
 ###load config###
 # load the training config
@@ -112,7 +113,7 @@ if opt.PCB:
 
 
 data_dir = test_dir
-
+# sftp://dipesh@10.142.142.137/home/dipesh/multisource_person_reid/data/DukeMTMC-reID/pytorch/train_all
 if opt.multi:
     image_datasets = {x: datasets.ImageFolder( os.path.join(data_dir,x) ,data_transforms) for x in ['gallery','query','multi-query','train_all']}
     dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=opt.batchsize,

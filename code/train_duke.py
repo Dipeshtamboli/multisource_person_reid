@@ -34,8 +34,9 @@ except ImportError: # will be 3.x series
 # --------
 parser = argparse.ArgumentParser(description='Training')
 parser.add_argument('--gpu_ids',default='0', type=str,help='gpu_ids: e.g. 0  0,1,2  0,2')
-parser.add_argument('--name',default='ft_ResNet50', type=str, help='output model name')
-parser.add_argument('--data_dir',default='/home/dipesh/multisource_person_reid/data/Market-1501-v15.09.15/pytorch',type=str, help='training dir path')
+parser.add_argument('--name',default='duke', type=str, help='output model name')
+# sftp://dipesh@10.142.142.137/home/dipesh/multisource_person_reid/data/DukeMTMC-reID/pytorch
+parser.add_argument('--data_dir',default='/home/dipesh/multisource_person_reid/data/DukeMTMC-reID/pytorch',type=str, help='training dir path')
 parser.add_argument('--train_all', action='store_true', help='use all training data' )
 parser.add_argument('--color_jitter', action='store_true', help='use color jitter in training' )
 parser.add_argument('--batchsize', default=32, type=int, help='batchsize')
@@ -49,6 +50,8 @@ parser.add_argument('--droprate', default=0.5, type=float, help='drop rate')
 parser.add_argument('--PCB', action='store_true', help='use PCB+ResNet50' )
 parser.add_argument('--fp16', action='store_true', help='use float16 instead of float32, which will save about 50% memory' )
 opt = parser.parse_args()
+
+os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 
 fp16 = opt.fp16
 data_dir = opt.data_dir
@@ -114,6 +117,7 @@ data_transforms = {
 train_all = ''
 if opt.train_all:
      train_all = ''
+     # train_all = '_all'
 
 image_datasets = {}
 image_datasets['train'] = datasets.ImageFolder(os.path.join(data_dir, 'train' + train_all),
