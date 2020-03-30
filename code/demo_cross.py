@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 # Evaluate
 parser = argparse.ArgumentParser(description='Demo')
 parser.add_argument('--query_index', default=777, type=int, help='test_image_index')
+# parser.add_argument('--test_dir',default='/home/dipesh/multisource_person_reid/data/DukeMTMC-reID/pytorch',type=str, help='./test_data')
 parser.add_argument('--test_dir',default='/home/dipesh/multisource_person_reid/data/Market-1501-v15.09.15/pytorch',type=str, help='./test_data')
 opts = parser.parse_args()
 
@@ -19,15 +20,17 @@ opts = parser.parse_args()
 data_dir = opts.test_dir
 image_datasets = {x: datasets.ImageFolder( os.path.join(data_dir,x) ) for x in ['gallery','query']}
 
+if not os.path.exists("./demo/"):
+    os.makedirs("./demo/")
+# if not os.path.exists("./demo/imgs/"):
+#     os.makedirs("./demo/imgs/")
 #####################################################################
 #Show result
 def imshow(path, title=None):
     """Imshow for Tensor."""
     im = plt.imread(path)
     # plt.imshow(im)
-    if not os.path.exists("./demo/imgs/"):
-        os.makedirs("./demo/imgs/")
-    plt.savefig("./demo/imgs/"+path.split('/')[-1])
+    # plt.savefig("./demo/imgs/"+path.split('/')[-1])
 
     if title is not None:
         plt.title(title)
@@ -36,7 +39,8 @@ def imshow(path, title=None):
     plt.pause(0.001)  # pause a bit so that plots are updated
 
 ######################################################################
-result = scipy.io.loadmat('pytorch_result.mat')
+result = scipy.io.loadmat('pytorch_result_duke.mat')
+# result = scipy.io.loadmat('pytorch_result.mat')
 # print('pytorch_result.mat', result.shape)
 # for i in result:
 #     print(i)

@@ -1,6 +1,7 @@
 from scipy import io
-pytorch_result = io.loadmat('pytorch_result_duke.mat')
 
+print(" ########### market 1501 ###################")
+pytorch_result = io.loadmat('pytorch_result_duke.mat')
 
 gallery_f = pytorch_result["gallery_f"]
 gallery_label = pytorch_result["gallery_label"]

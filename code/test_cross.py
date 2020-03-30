@@ -31,7 +31,9 @@ except ImportError: # will be 3.x series
 parser = argparse.ArgumentParser(description='Training')
 parser.add_argument('--gpu_ids',default='0', type=str,help='gpu_ids: e.g. 0  0,1,2  0,2')
 parser.add_argument('--which_epoch',default='last', type=str, help='0,1,2,3...or last')
-parser.add_argument('--test_dir',default='/home/dipesh/multisource_person_reid/data/Market-1501-v15.09.15/pytorch',type=str, help='./test_data')
+parser.add_argument('--test_dir',default='/home/dipesh/multisource_person_reid/data/DukeMTMC-reID/pytorch',type=str, help='./test_data')
+# parser.add_argument('--test_dir',default='/home/dipesh/multisource_person_reid/data/Market-1501-v15.09.15/pytorch',type=str, help='./test_data')
+# parser.add_argument('--name', default='duke', type=str, help='save model path')
 parser.add_argument('--name', default='ft_ResNet50', type=str, help='save model path')
 parser.add_argument('--batchsize', default=256, type=int, help='batchsize')
 parser.add_argument('--use_dense', action='store_true', help='use densenet121' )
@@ -40,6 +42,7 @@ parser.add_argument('--multi', action='store_true', help='use multiple query' )
 parser.add_argument('--fp16', action='store_true', help='use fp16.' )
 parser.add_argument('--ms',default='1', type=str,help='multiple_scale: e.g. 1 1,1.1  1,1.1,1.2')
 
+os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 opt = parser.parse_args()
 ###load config###
 # load the training config
@@ -112,7 +115,7 @@ if opt.PCB:
 
 
 data_dir = test_dir
-
+# sftp://dipesh@10.142.142.137/home/dipesh/multisource_person_reid/data/DukeMTMC-reID/pytorch/train_all
 if opt.multi:
     image_datasets = {x: datasets.ImageFolder( os.path.join(data_dir,x) ,data_transforms) for x in ['gallery','query','multi-query','train_all']}
     dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=opt.batchsize,
@@ -160,6 +163,7 @@ def extract_feature(model,dataloaders):
         for i in range(2):
             if(i==1):
                 img = fliplr(img)
+            if img
             input_img = Variable(img.cuda())
             for scale in ms:
                 if scale != 1:
@@ -258,11 +262,12 @@ with torch.no_grad():
 result = {'gallery_f':gallery_feature.numpy(),'gallery_label':gallery_label,'gallery_cam':gallery_cam,
     'query_f':query_feature.numpy(),'query_label':query_label,'query_cam':query_cam,
     'train_all_f':train_all_feature.numpy(),'train_all_label':train_all_label,'train_all_cam':train_all_cam}
-scipy.io.savemat('pytorch_result.mat',result)
+# scipy.io.savemat('pytorch_result_d-m.mat',result)
+scipy.io.savemat('pytorch_result_m-d.mat',result)
 
 print(opt.name)
 result = './model/%s/result.txt'%opt.name
-os.system('python3 evaluate_gpu.py | tee -a %s'%result)
+# os.system('python3 evaluate_gpu.py | tee -a %s'%result)
 
 if opt.multi:
     result = {'mquery_f':mquery_feature.numpy(),'mquery_label':mquery_label,'mquery_cam':mquery_cam}
