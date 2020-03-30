@@ -163,7 +163,7 @@ def extract_feature(model,dataloaders):
         for i in range(2):
             if(i==1):
                 img = fliplr(img)
-            if img
+            # if img
             input_img = Variable(img.cuda())
             for scale in ms:
                 if scale != 1:
