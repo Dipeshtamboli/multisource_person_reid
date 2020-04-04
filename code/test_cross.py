@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-
+# Data -> DukeMTMC-reID and model -> Market-1501-v15 name -> md
 from __future__ import print_function, division
 
 import argparse

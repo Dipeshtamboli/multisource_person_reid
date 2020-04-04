@@ -15,22 +15,31 @@ Following is the combined TSNE of plot of both the dataset's 512-d features wher
 ### Cross trained and extracted the features
 #### Trained on DukeMTMC dataset and query extracted from Market1501 dataset
 ![](https://github.com/Dipeshtamboli/multisource_person_reid/blob/master/code/tsne/m_d_dm_tsne.png)
-Here, our model is trained on Market1501 dataset ans the query images are from DukeMTMC dataset. In this TSNE, 
+Here, our model is trained on DukeMTMC dataset ans the query images are from Market1501 dataset. In this TSNE, 
 
-> Blue-> Market1501 features from the model trained on Market1501
-> Orange-> DukeMTMC features from the model trained on DukeMTMC and 
+> Blue-> Market1501 features from the model trained on Market1501   
+> Orange-> DukeMTMC features from the model trained on DukeMTMC and  
 > Green-> **Market1501 features from the model trained on DukeMTMC**
+
+We can see that the cross-Market1501(Market features extracted from the model trained on DukeMTMC dataset) features are mixed with DukeMTMC features partially. Although we used the same extractor(model trained on Duke) for DukeMTMC and Market1501 still their features are not overlapping and have some **shift** between them.
 
 #### Trained on Market1501 dataset and query extracted from DukeMTMC dataset
 ![](https://github.com/Dipeshtamboli/multisource_person_reid/blob/master/code/tsne/m_d_md_tsne.png)
 Here, our model is trained on Market1501 dataset ans the query images are from DukeMTMC dataset. In this TSNE, 
 
-> Blue-> Market1501 features from the model trained on Market1501
-> Orange-> DukeMTMC features from the model trained on DukeMTMC and 
-> Green-> **DukeMTMC features from the model trained on Market1501**
+> Blue-> Market1501 features from the model trained on Market1501   
+> Orange-> DukeMTMC features from the model trained on DukeMTMC and   
+> Green-> **DukeMTMC features from the model trained on Market1501**   
 
+Similarly what we saw above,here,
+We can see that the cross-Duke(Duke features extracted from the model trained on Market1501 dataset) features are mixed with Market1501 features partially. Although we used the same extractor(model trained on Market1501) for Market and duke still their features are not overlapping and have some **shift** is there between them.
 
-![](https://github.com/Dipeshtamboli/multisource_person_reid/blob/master/code/tsne/market_duke.png)
+#### Both cross-examples are included
+> Blue-> Market1501 features from the model trained on Market1501   
+> Orange-> DukeMTMC features from the model trained on DukeMTMC and   
+> Green-> **Market1501 features from the model trained on DukeMTMC**
+> Red-> **DukeMTMC features from the model trained on Market1501**   
+![](https://github.com/Dipeshtamboli/multisource_person_reid/blob/master/code/tsne/all_m_d_dm_md.png)
 
 
 =========================================================================================================================
