@@ -46,8 +46,10 @@ Like mentioned above, you can checked the cross-feauture mixing here.
 
 ### Query-result illustration for domain shift
 Where all the results are good for the models trained and tested on the same dataset, not a single result is correct for the cross-models(trained on one and tested on other) due to domain shift.
-![](https://github.com/Dipeshtamboli/multisource_person_reid/blob/master/code/reid_results/dmd.png)
+#### Model tested on Market1501 and trained on DukeMTMC and Market respectively
 ![](https://github.com/Dipeshtamboli/multisource_person_reid/blob/master/code/reid_results/mdm.png)
+#### Model tested on DukeMTMC and trained on Duke and Market respectively
+![](https://github.com/Dipeshtamboli/multisource_person_reid/blob/master/code/reid_results/dmd.png)
 
 ==================================================================================
 
