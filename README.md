@@ -1,6 +1,6 @@
 <h1 align="center"> Person re-identification utilizing multiple source domains </h1>
 
-Here, we are using [Layumi's Person re-ID](https://github.com/layumi/Person_reID_baseline_pytorch) code for extracting features and to create baseline model. So citing it as it is and also using it's readme file with suitable chamges.
+Here, we are using [Layumi's Person re-ID](https://github.com/layumi/Person_reID_baseline_pytorch) code for extracting features and to create baseline model. So citing it as it is and also using it's readme file with suitable changes.
 
 ## What is domain shift?
 
