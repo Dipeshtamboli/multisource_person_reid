@@ -2,8 +2,9 @@
 
 Here, we are using [Layumi's Person re-ID](https://github.com/layumi/Person_reID_baseline_pytorch) code for extracting features and to create baseline model. So citing it as it is and also using it's readme file with suitable chamges.
 
-# What is domain shift?
+## What is domain shift?
 
+### Separately trained and extracted the features
 Following is the TSNE plot of the features extractred for the different identities of Market1501 and DutkeMTMC dataset.
 First we trained our model on Market1501 dataset and extracted query identities of the same Market1501.
 Then we trained our model in DukeMTMC dataset and extracted query identities of the same DukeMTMC.   
@@ -11,6 +12,28 @@ Following is the combined TSNE of plot of both the dataset's 512-d features wher
 
 ![](https://github.com/Dipeshtamboli/multisource_person_reid/blob/master/code/tsne/market_duke.png)
 
+### Cross trained and extracted the features
+#### Trained on DukeMTMC dataset and query extracted from Market1501 dataset
+![](https://github.com/Dipeshtamboli/multisource_person_reid/blob/master/code/tsne/m_d_dm_tsne.png)
+Here, our model is trained on Market1501 dataset ans the query images are from DukeMTMC dataset. In this TSNE, 
+
+> Blue-> Market1501 features from the model trained on Market1501
+> Orange-> DukeMTMC features from the model trained on DukeMTMC and 
+> Green-> **Market1501 features from the model trained on DukeMTMC**
+
+#### Trained on Market1501 dataset and query extracted from DukeMTMC dataset
+![](https://github.com/Dipeshtamboli/multisource_person_reid/blob/master/code/tsne/m_d_md_tsne.png)
+Here, our model is trained on Market1501 dataset ans the query images are from DukeMTMC dataset. In this TSNE, 
+
+> Blue-> Market1501 features from the model trained on Market1501
+> Orange-> DukeMTMC features from the model trained on DukeMTMC and 
+> Green-> **DukeMTMC features from the model trained on Market1501**
+
+
+![](https://github.com/Dipeshtamboli/multisource_person_reid/blob/master/code/tsne/market_duke.png)
+
+
+=========================================================================================================================
 
 ### Prepare Data Folder (`python prepare.py`)
 Download [Market1501 Dataset](http://www.liangzheng.com.cn/Project/project_reid.html) [[Google]](https://drive.google.com/file/d/0B8-rUzbwVRk0c054eEozWG9COHM/view) [[Baidu]](https://pan.baidu.com/s/1ntIi2Op)
@@ -105,71 +128,3 @@ python demo.py --query_index 777
 ```
 `--query_index ` which query you want to test. You may select a number in the range of `0 ~ 3367`.
 
-<!-- ### re-ranking
-```bash
-python evaluate_rerank.py
-```
-**It may take more than 10G Memory to run.** So run it on a powerful machine if possible. 
-
-It will output Rank@1, Rank@5, Rank@10 and mAP results.
-
-### Tips
-Notes the format of the camera id and the number of cameras.
-
-For some dataset, e.g., MSMT17, there are more than 10 cameras. You need to modify the `prepare.py` and `test.py` to read the double-digit camera ID.
-
-For some vehicle re-ID datasets. e.g. VeRi, you also need to modify the `prepare.py` and `test.py`.  It has different naming rules.
-https://github.com/layumi/Person_reID_baseline_pytorch/issues/107 (Sorry. It is in Chinese) -->
-
-
-<!-- ## Citation
-The following paper uses and reports the result of the baseline model. You may cite it in your paper.
-```
-@article{zheng2019joint,
-  title={Joint discriminative and generative learning for person re-identification},
-  author={Zheng, Zhedong and Yang, Xiaodong and Yu, Zhiding and Zheng, Liang and Yang, Yi and Kautz, Jan},
-  journal={IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
-  year={2019}
-}
-```
-
-The following papers may be the first two to use the bottleneck baseline. You may cite them in your paper.
-```
-@article{DBLP:journals/corr/SunZDW17,
-  author    = {Yifan Sun and
-               Liang Zheng and
-               Weijian Deng and
-               Shengjin Wang},
-  title     = {SVDNet for Pedestrian Retrieval},
-  booktitle   = {ICCV},
-  year      = {2017},
-}
-
-@article{hermans2017defense,
-  title={In Defense of the Triplet Loss for Person Re-Identification},
-  author={Hermans, Alexander and Beyer, Lucas and Leibe, Bastian},
-  journal={arXiv preprint arXiv:1703.07737},
-  year={2017}
-}
-```
-
-Basic Model
-```
-@article{zheng2018discriminatively,
-  title={A discriminatively learned CNN embedding for person reidentification},
-  author={Zheng, Zhedong and Zheng, Liang and Yang, Yi},
-  journal={ACM Transactions on Multimedia Computing, Communications, and Applications (TOMM)},
-  volume={14},
-  number={1},
-  pages={13},
-  year={2018},
-  publisher={ACM}
-}
-``` -->
-
-## Related Repos
-1. [Pedestrian Alignment Network](https://github.com/layumi/Pedestrian_Alignment) ![GitHub stars](https://img.shields.io/github/stars/layumi/Pedestrian_Alignment.svg?style=flat&label=Star)
-2. [2stream Person re-ID](https://github.com/layumi/2016_person_re-ID) ![GitHub stars](https://img.shields.io/github/stars/layumi/2016_person_re-ID.svg?style=flat&label=Star)
-3. [Pedestrian GAN](https://github.com/layumi/Person-reID_GAN) ![GitHub stars](https://img.shields.io/github/stars/layumi/Person-reID_GAN.svg?style=flat&label=Star)
-4. [Language Person Search](https://github.com/layumi/Image-Text-Embedding) ![GitHub stars](https://img.shields.io/github/stars/layumi/Image-Text-Embedding.svg?style=flat&label=Star)
-5. [DG-Net](https://github.com/NVlabs/DG-Net) ![GitHub stars](https://img.shields.io/github/stars/NVlabs/DG-Net.svg?style=flat&label=Star)
