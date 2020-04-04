@@ -39,10 +39,17 @@ We can see that the cross-Duke(Duke features extracted from the model trained on
 > Orange-> DukeMTMC features from the model trained on DukeMTMC and   
 > Green-> **Market1501 features from the model trained on DukeMTMC**
 > Red-> **DukeMTMC features from the model trained on Market1501**   
+
 ![](https://github.com/Dipeshtamboli/multisource_person_reid/blob/master/code/tsne/all_m_d_dm_md.png)
 
+Like mentioned above, you can checked the cross-feauture mixing here.
 
-=========================================================================================================================
+### Query-result illustration for domain shift
+Where all the results are good for the models trained and tested on the same dataset, not a single result is correct for the cross-models(trained on one and tested on other) due to domain shift.
+![](https://github.com/Dipeshtamboli/multisource_person_reid/blob/master/code/reid_results/dmd.png)
+![](https://github.com/Dipeshtamboli/multisource_person_reid/blob/master/code/reid_results/mdm.png)
+
+==================================================================================
 
 ### Prepare Data Folder (`python prepare.py`)
 Download [Market1501 Dataset](http://www.liangzheng.com.cn/Project/project_reid.html) [[Google]](https://drive.google.com/file/d/0B8-rUzbwVRk0c054eEozWG9COHM/view) [[Baidu]](https://pan.baidu.com/s/1ntIi2Op)
