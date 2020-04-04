@@ -37,7 +37,7 @@ We can see that the cross-Duke(Duke features extracted from the model trained on
 #### Both cross-examples are included
 > Blue-> Market1501 features from the model trained on Market1501   
 > Orange-> DukeMTMC features from the model trained on DukeMTMC and   
-> Green-> **Market1501 features from the model trained on DukeMTMC**
+> Green-> **Market1501 features from the model trained on DukeMTMC**   
 > Red-> **DukeMTMC features from the model trained on Market1501**   
 
 ![](https://github.com/Dipeshtamboli/multisource_person_reid/blob/master/code/tsne/all_m_d_dm_md.png)
