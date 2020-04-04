@@ -25,8 +25,6 @@ print("train_all_cam",train_all_cam.shape)
 
 print(" ########### market 1501 ###################")
 pytorch_result = io.loadmat('pytorch_result.mat')
-
-
 gallery_f = pytorch_result["gallery_f"]
 gallery_label = pytorch_result["gallery_label"]
 gallery_cam = pytorch_result["gallery_cam"]
