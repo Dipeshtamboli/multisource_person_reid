@@ -3,6 +3,7 @@
 from __future__ import print_function, division
 
 import argparse
+from torchsummary import summary
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -319,6 +320,9 @@ if opt.PCB:
 opt.nclasses = len(class_names)
 
 print(model)
+print(summary)
+summary(model, (3,384,192))
+exit()
 
 if not opt.PCB:
     ignored_params = list(map(id, model.classifier.parameters() ))
