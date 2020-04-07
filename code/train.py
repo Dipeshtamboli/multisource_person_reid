@@ -321,7 +321,7 @@ opt.nclasses = len(class_names)
 
 print(model)
 print(summary)
-summary(model, (3,384,192))
+summary(model, (3,384,192).cuda())
 exit()
 
 if not opt.PCB:
