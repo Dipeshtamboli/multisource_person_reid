@@ -1,148 +1,172 @@
-<h1 align="center"> Person re-identification utilizing multiple source domains </h1>
+# Multi-source Person Re-Identification: A Study of Domain Shift
 
-Here, we are using [Layumi's Person re-ID](https://github.com/layumi/Person_reID_baseline_pytorch) code for extracting features and to create baseline model. So citing it as it is and also using it's readme file with suitable changes.
+A person re-identification (re-ID) codebase for training and evaluating CNN embeddings **within a single dataset** and **across datasets**, used to observe and visualize the domain shift that appears when a model trained on one dataset (e.g. Market-1501) is tested on another (e.g. DukeMTMC-reID).
 
-## What is domain shift?
+## Overview
 
-### Separately trained and extracted the features
-Following is the TSNE plot of the features extractred for the different identities of Market1501 and DutkeMTMC dataset.
-First we trained our model on Market1501 dataset and extracted query identities of the same Market1501.
-Then we trained our model in DukeMTMC dataset and extracted query identities of the same DukeMTMC.   
-Following is the combined TSNE of plot of both the dataset's 512-d features where we can see the different geometric spacial location. In 512-d dimension, both set of the features are far apart and thus domain shift is there.
+This project fine-tunes standard re-ID backbones (ResNet-50, DenseNet-121, NASNet, PCB) on Market-1501 and DukeMTMC-reID, then extracts and compares features across domains. Cross-domain testing scripts run a model trained on one dataset against the query/gallery of the other, and t-SNE scripts plot the resulting 512-d feature distributions to make the domain gap visible. The core re-ID pipeline is built on top of [Zhedong Zheng's `Person_reID_baseline_pytorch`](https://github.com/layumi/Person_reID_baseline_pytorch); the cross-domain testing, t-SNE domain-shift analysis, and additional domain-adaptation experiments are the contributions of this repository.
 
-![](https://github.com/Dipeshtamboli/multisource_person_reid/blob/master/code/tsne/market_duke.png)
+All runnable code lives under the [`code/`](code) directory.
 
-### Cross trained and extracted the features
-#### Trained on DukeMTMC dataset and query extracted from Market1501 dataset
-![](https://github.com/Dipeshtamboli/multisource_person_reid/blob/master/code/tsne/m_d_dm_tsne.png)
-Here, our model is trained on DukeMTMC dataset ans the query images are from Market1501 dataset. In this TSNE, 
+## Requirements
 
-> Blue-> Market1501 features from the model trained on Market1501   
-> Orange-> DukeMTMC features from the model trained on DukeMTMC and  
-> Green-> **Market1501 features from the model trained on DukeMTMC**
+There is no `requirements.txt` or `environment.yml` in the repo; the following are inferred from the imports.
 
-We can see that the cross-Market1501(Market features extracted from the model trained on DukeMTMC dataset) features are mixed with DukeMTMC features partially. Although we used the same extractor(model trained on Duke) for DukeMTMC and Market1501 still their features are not overlapping and have some **shift** between them.
+Core re-ID pipeline (PyTorch):
+- Python 3
+- `torch`, `torchvision`
+- `torchsummary`
+- `numpy`, `scipy`
+- `pyyaml`
+- `matplotlib`
+- `Pillow`
+- (optional) [NVIDIA apex](https://github.com/NVIDIA/apex) — only needed for `--fp16` low-precision training
 
-#### Trained on Market1501 dataset and query extracted from DukeMTMC dataset
-![](https://github.com/Dipeshtamboli/multisource_person_reid/blob/master/code/tsne/m_d_md_tsne.png)
-Here, our model is trained on Market1501 dataset ans the query images are from DukeMTMC dataset. In this TSNE, 
+t-SNE visualizations ([`code/tsne/`](code/tsne)):
+- `MulticoreTSNE`
+- `seaborn`
 
-> Blue-> Market1501 features from the model trained on Market1501   
-> Orange-> DukeMTMC features from the model trained on DukeMTMC and   
-> Green-> **DukeMTMC features from the model trained on Market1501**   
+Domain-adaptation experiments ([`code/multi-source/`](code/multi-source)):
+- `tensorflow`, `keras`, `scikit-learn`
+- a `flip_gradient` module (DANN gradient-reversal layer) — **not bundled** in this repo and must be supplied separately
 
-Similarly what we saw above,here,
-We can see that the cross-Duke(Duke features extracted from the model trained on Market1501 dataset) features are mixed with Market1501 features partially. Although we used the same extractor(model trained on Market1501) for Market and duke still their features are not overlapping and have some **shift** is there between them.
+## Usage
 
-#### Both cross-examples are included
-> Blue-> Market1501 features from the model trained on Market1501   
-> Orange-> DukeMTMC features from the model trained on DukeMTMC and   
-> Green-> **Market1501 features from the model trained on DukeMTMC**   
-> Red-> **DukeMTMC features from the model trained on Market1501**   
+Run the commands below from inside the `code/` directory.
 
-![](https://github.com/Dipeshtamboli/multisource_person_reid/blob/master/code/tsne/all_m_d_dm_md.png)
+### 1. Prepare the data
 
-Like mentioned above, you can checked the cross-feauture mixing here.
+Edit the `download_path` at the top of the prepare script to point to your extracted dataset, then run it. This reorganizes the dataset into a `pytorch/` subfolder with `train`, `val`, `train_all`, `query`, and `gallery` splits that `torchvision.datasets.ImageFolder` can read.
 
-### Query-result illustration for domain shift
-Where all the results are good for the models trained and tested on the same dataset, not a single result is correct for the cross-models(trained on one and tested on other) due to domain shift.
-#### Model tested on Market1501 and trained on DukeMTMC and Market respectively
-![](https://github.com/Dipeshtamboli/multisource_person_reid/blob/master/code/reid_results/mdm.png)
-#### Model tested on DukeMTMC and trained on Duke and Market respectively
-![](https://github.com/Dipeshtamboli/multisource_person_reid/blob/master/code/reid_results/dmd.png)
-
-==================================================================================
-
-### Prepare Data Folder (`python prepare.py`)
-Download [Market1501 Dataset](http://www.liangzheng.com.cn/Project/project_reid.html) [[Google]](https://drive.google.com/file/d/0B8-rUzbwVRk0c054eEozWG9COHM/view) [[Baidu]](https://pan.baidu.com/s/1ntIi2Op)
-You may notice that the downloaded folder is organized as:
-```
-├── Market/
-│   ├── bounding_box_test/          /* Files for testing (candidate images pool)
-│   ├── bounding_box_train/         /* Files for training 
-│   ├── gt_bbox/                    /* Files for multiple query testing 
-│   ├── gt_query/                   /* We do not use it 
-│   ├── query/                      /* Files for testing (query images)
-│   ├── readme.txt
-```
-Open and edit the script `prepare.py` in the editor. Change the fifth line in `prepare.py` to your download path, such as `\home\zzd\Download\Market`. Run this script in the terminal.
 ```bash
-python prepare.py
-```
-We create a subfolder called `pytorch` under the download folder. 
-```
-├── Market/
-│   ├── bounding_box_test/          /* Files for testing (candidate images pool)
-│   ├── bounding_box_train/         /* Files for training 
-│   ├── gt_bbox/                    /* Files for multiple query testing 
-│   ├── gt_query/                   /* We do not use it
-│   ├── query/                      /* Files for testing (query images)
-│   ├── readme.txt
-│   ├── pytorch/
-│       ├── train/                   /* train 
-│           ├── 0002
-|           ├── 0007
-|           ...
-│       ├── val/                     /* val
-│       ├── train_all/               /* train+val      
-│       ├── query/                   /* query files  
-│       ├── gallery/                 /* gallery files  
+python prepare.py          # Market-1501
+python prepare_duke.py     # DukeMTMC-reID
+python prepare_viper.py    # VIPeR
 ```
 
-In every subdir, such as `pytorch/train/0002`, images with the same ID are arranged in the folder.
-Now we have successfully prepared the data for `torchvision` to read the data. 
+### 2. Train
 
-### Train
-Train a model by
+Set `--data_dir` to the `pytorch/` folder created above (the scripts default to a hard-coded `/home/dipesh/...` path).
+
 ```bash
-python train.py --gpu_ids 0 --name ft_ResNet50 --train_all --batchsize 32  --data_dir your_data_path
+python train.py --gpu_ids 0 --name ft_ResNet50 --train_all --batchsize 32 --data_dir <path>/pytorch
+python train_duke.py --gpu_ids 0 --name duke --train_all --batchsize 32 --data_dir <path>/pytorch
 ```
-`--gpu_ids` which gpu to run.
 
-`--name` the name of model.
+Useful flags: `--erasing_p 0.5` (random erasing), `--use_dense` (DenseNet-121), `--use_NAS` (NASNet), `--PCB` (PCB backbone), `--color_jitter`, `--warm_epoch`, `--lr`, `--fp16`. Checkpoints and the training config (`opts.yaml`) are written to `./model/<name>/`.
 
-`--data_dir` the path of the training data.
+> **Note:** the committed `train.py` contains a leftover debug block near the model setup:
+> ```python
+> summary(model, (3,384,192).cuda())
+> exit()
+> ```
+> This runs before the optimizer/training loop and will stop (and error on the tuple `.cuda()` call) before any training happens. Remove these two lines to run a full training.
 
-`--train_all` using all images to train. 
+### 3. Extract features (test)
 
-`--batchsize` batch size.
+`test.py` loads the config from `./model/<name>/opts.yaml`, extracts features for the query and gallery of `--test_dir`, and writes them to `pytorch_result.mat`.
 
-`--erasing_p` random erasing probability.
-
-Train a model with random erasing by
 ```bash
-python train.py --gpu_ids 0 --name ft_ResNet50 --train_all --batchsize 32  --data_dir your_data_path --erasing_p 0.5
+# same-domain: model and data from the same dataset
+python test.py --gpu_ids 0 --name ft_ResNet50 --test_dir <path>/pytorch --batchsize 32 --which_epoch 59
+python test_duke.py --gpu_ids 0 --name duke --test_dir <duke_path>/pytorch --batchsize 32
+
+# cross-domain: model trained on one dataset, tested on the other (domain shift)
+python test_cross.py --gpu_ids 0 --name ft_ResNet50 --test_dir <duke_path>/pytorch
 ```
 
-### Test
-Use trained model to extract feature by
+### 4. Evaluate
+
 ```bash
-python test.py --gpu_ids 0 --name ft_ResNet50 --test_dir your_data_path  --batchsize 32 --which_epoch 59
+python evaluate.py          # CPU; prints Rank@1, Rank@5, Rank@10, mAP
+python evaluate_gpu.py      # faster GPU evaluation
+python evaluate_rerank.py   # evaluation with k-reciprocal re-ranking
 ```
-`--gpu_ids` which gpu to run.
 
-`--batchsize` batch size.
+### 5. Visualize a single query
 
-`--name` the dir name of trained model.
-
-`--which_epoch` select the i-th model.
-
-`--data_dir` the path of the testing data.
-
-
-### Evaluation
 ```bash
-python evaluate.py
+python demo.py --query_index 777 --test_dir <path>/pytorch      # same-domain
+python demo_cross.py --query_index 777                          # cross-domain
+python demo_duke.py --query_index 777
 ```
-It will output Rank@1, Rank@5, Rank@10 and mAP results.
-You may also try `evaluate_gpu.py` to conduct a faster evaluation with GPU.
 
-For mAP calculation, you also can refer to the [C++ code for Oxford Building](http://www.robots.ox.ac.uk/~vgg/data/oxbuildings/compute_ap.cpp). We use the triangle mAP calculation (consistent with the Market1501 original code).
+### 6. t-SNE domain-shift plots
 
-### A simple visualization (`python demo.py`)
-To visualize the result, 
+The scripts in [`code/tsne/`](code/tsne) load the `.mat` feature files produced by the test scripts and render the t-SNE figures shown below.
+
+```bash
+python tsne/tsne.py           # combined Market/Duke and cross-domain features
+python tsne/tsne_md.py
+python tsne/tsne_separate.py
 ```
-python demo.py --query_index 777
-```
-`--query_index ` which query you want to test. You may select a number in the range of `0 ~ 3367`.
 
+### Additional experiments
+
+- [`code/few_shot_learning/`](code/few_shot_learning) — a few-shot variant of the re-ID `train.py`/`test.py`/`model.py`.
+- [`code/multi-source/`](code/multi-source) — separate TensorFlow/Keras domain-adaptation experiments (DANN with a gradient-reversal layer) on the Office-31, Office-Home, and ImageCLEF-DA benchmarks (`cvpr_opms1_psudolabel_off31.py`, `cvpr_opms1_psudolabel_off_home.py`, `cvpr_opms1_psudolabel_ipc.py`, with matching notebooks). These require the external `flip_gradient` module noted above.
+
+## Model architectures
+
+Defined in [`code/model.py`](code/model.py): `ft_net` (ResNet-50), `ft_net_dense` (DenseNet-121), `ft_net_NAS`, `ft_net_middle`, and `PCB` / `PCB_test`.
+
+## Results / Figures
+
+### Feature distributions per dataset
+Features extracted after training and testing each model on its own dataset. In the shared 512-d space the Market-1501 and DukeMTMC-reID features occupy clearly separate regions — evidence of domain shift.
+
+![Separate t-SNE of Market1501 and DukeMTMC features](code/tsne/market_duke.png)
+
+### Cross-domain feature mixing
+Model trained on DukeMTMC-reID, queried with Market-1501 images (green = cross features):
+
+![t-SNE: trained on Duke, queried with Market](code/tsne/m_d_dm_tsne.png)
+
+Model trained on Market-1501, queried with DukeMTMC-reID images (green = cross features):
+
+![t-SNE: trained on Market, queried with Duke](code/tsne/m_d_md_tsne.png)
+
+Both cross-domain cases overlaid:
+
+![t-SNE: all four feature sets](code/tsne/all_m_d_dm_md.png)
+
+### Query retrieval illustration
+Retrieval results are strong when the model is trained and tested on the same dataset, and fail under cross-domain testing due to the domain gap.
+
+Tested on Market-1501, models trained on Duke vs. Market:
+
+![Retrieval, tested on Market](code/reid_results/mdm.png)
+
+Tested on DukeMTMC-reID, models trained on Duke vs. Market:
+
+![Retrieval, tested on Duke](code/reid_results/dmd.png)
+
+Per-query result crops are also stored under [`code/reid_results/`](code/reid_results) (e.g. `market-to-market/`, `market-to-duke/`, `duke-to-market/`, `duke-to-duke/`).
+
+## Datasets
+
+- **Market-1501** — person re-ID benchmark.
+- **DukeMTMC-reID** — person re-ID benchmark (note: withdrawn by its original authors).
+- **VIPeR** — small-scale re-ID dataset (`prepare_viper.py`).
+- **Office-31**, **Office-Home**, **ImageCLEF-DA** — used by the domain-adaptation experiments in `code/multi-source/`.
+
+## Citation / Acknowledgements
+
+The core re-ID training/testing/evaluation pipeline is derived from [`Person_reID_baseline_pytorch`](https://github.com/layumi/Person_reID_baseline_pytorch) by Zhedong Zheng (MIT License, see [`code/LICENSE`](code/LICENSE)). If you use this code, please also credit the underlying baseline:
+
+```bibtex
+@article{zheng2017discriminatively,
+  title={A discriminatively learned CNN embedding for person reidentification},
+  author={Zheng, Zhedong and Zheng, Liang and Yang, Yi},
+  journal={ACM Transactions on Multimedia Computing, Communications, and Applications (TOMM)},
+  volume={14},
+  number={1},
+  pages={1--20},
+  year={2017},
+  publisher={ACM}
+}
+```
+
+## License
+
+This repository is released under the MIT License (see [`LICENSE`](LICENSE)). The code under `code/` retains its own MIT License from the upstream baseline (see [`code/LICENSE`](code/LICENSE)).
